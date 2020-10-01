@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Iot.Device.GrovePiDevice.Sensors;
 using SmartHome.Services;
+using SmartHome.Models;
 
 namespace SmartHome.Controllers
 {
@@ -11,12 +12,12 @@ namespace SmartHome.Controllers
     {
         private static GrovePiService _grovePi;
 
-        //private static DBService _context;
+        private static DBService _context;
 
-        public SmartHomeController(GrovePiService grovePiService)
+        public SmartHomeController(GrovePiService grovePiService, DBService DBService)
         {
             _grovePi = grovePiService;
-            //_context = DBService;
+            _context = DBService;
         }
 
         [HttpGet]
@@ -56,14 +57,14 @@ namespace SmartHome.Controllers
             return $"Temp: {temperature}C  Humid: {humidity}%";
         }
 
-        //[HttpPost]
-        //[Route("sensors/temphumid")]
-        //public async Task<string> PostTemperatureHumidSensor(TempHumidSensor tempHumidSensor)
-        //{
-        //    _context.CreateTempHumidEntry(tempHumidSensor);
+        [HttpPost]
+        [Route("sensors/temphumid")]
+        public async Task<string> PostTemperatureHumidSensor(TempHumidSensor tempHumidSensor)
+        {
+            _context.CreateTempHumidEntry(tempHumidSensor);
 
-        //    return "Succesfully created new temphumid reading";
-        //}
+            return "Succesfully created new temphumid reading";
+        }
 
         private string ToggleLight(Led led, string name)
         {

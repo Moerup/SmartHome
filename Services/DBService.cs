@@ -14,7 +14,6 @@ namespace SmartHome.Services
             _context = context;
         }
 
-
         public void CreateTempHumidEntry(TempHumidSensor tempHumidSensor)
         {
             _context.Add(new TempHumidSensor
