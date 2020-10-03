@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Iot.Device.GrovePiDevice.Sensors;
 using SmartHome.Services;
 using SmartHome.Models;
+using System;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace SmartHome.Controllers
 {
@@ -12,12 +15,12 @@ namespace SmartHome.Controllers
     {
         private static GrovePiService _grovePi;
 
-        private static DBService _context;
+        private static TempHumidContext _context;
 
-        public SmartHomeController(GrovePiService grovePiService, DBService DBService)
+        public SmartHomeController(GrovePiService grovePiService, TempHumidContext context)
         {
             _grovePi = grovePiService;
-            _context = DBService;
+            _context = context;
         }
 
         [HttpGet]
@@ -61,9 +64,51 @@ namespace SmartHome.Controllers
         [Route("sensors/temphumid")]
         public async Task<string> PostTemperatureHumidSensor(TempHumidSensor tempHumidSensor)
         {
-            _context.CreateTempHumidEntry(tempHumidSensor);
+            Console.WriteLine("POST Request - TempHumid reading");
 
+            try
+            {
+                Console.WriteLine("Creating TempHumid reading");
+
+                _context.Add(new TempHumidSensor
+                {
+                    Location = tempHumidSensor.Location,
+                    DateTime = DateTime.Now,
+                    Humidity = tempHumidSensor.Humidity,
+                    Temperature = tempHumidSensor.Temperature
+                });
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            Console.WriteLine("Succes!");
             return "Succesfully created new temphumid reading";
+        }
+
+        [HttpGet]
+        [Route("sensors/temphumid")]
+        public async Task<List<TempHumidSensor>> GetAllTemperatureHumidSensorReadings()
+        {
+            Console.WriteLine("GET Request - TempHumid readings");
+
+            var readings = new List<TempHumidSensor>();
+
+            try
+            {
+                Console.WriteLine("Getting all TempHumid readings");
+
+                readings = await _context.TempHumidSensors.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            Console.WriteLine("Succes!");
+            return readings;
         }
 
         private string ToggleLight(Led led, string name)

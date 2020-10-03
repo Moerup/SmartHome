@@ -1,56 +1,66 @@
-﻿using SmartHome.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//using SmartHome.Models;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
 
-namespace SmartHome.Services
-{
-    public class DBService
-    {
-        private readonly TempHumidContext _context;
-        public DBService(TempHumidContext context)
-        {
-            _context = context;
-        }
+//namespace SmartHome.Services
+//{
+//    public class DBService
+//    {
+//        private readonly TempHumidContext _context;
 
-        public void CreateTempHumidEntry(TempHumidSensor tempHumidSensor)
-        {
-            _context.Add(new TempHumidSensor
-            {
-                Location = tempHumidSensor.Location,
-                DateTime = DateTime.Now,
-                Humidity = tempHumidSensor.Humidity,
-                Temperature = tempHumidSensor.Temperature
-            });
-        }
+//        public DBService()
+//        {
+//            _context = new TempHumidContext();
+//        }
 
-        public List<TempHumidSensor> GetTempHumidReadings(DateTime? from = null, DateTime? to = null)
-        {
-            // Finds based on timeinterval
-            if (from != null && to != null)
-            {
-                var tempHumidSensors1 = _context.TempHumidSensors
-                    .Where(x => x.DateTime > from && x.DateTime < to)
-                    .OrderByDescending(x => x.DateTime);
+//        public void CreateTempHumidEntry(TempHumidSensor tempHumidSensor)
+//        {
+//            Console.WriteLine("Creating TempHumid reading");
 
-                return tempHumidSensors1.ToList();
-            }
+//            try
+//            {
+//                _context.Add(new TempHumidSensor
+//                {
+//                    Location = tempHumidSensor.Location,
+//                    DateTime = DateTime.Now,
+//                    Humidity = tempHumidSensor.Humidity,
+//                    Temperature = tempHumidSensor.Temperature
+//                });
+//            }
+//            catch (Exception e)
+//            {
+//                Console.WriteLine(e);
+//            }
+//        }
 
-            // Finds based on from and to the newest
-            if (from == null && to != null)
-            {
-                var tempHumidSensors2 = _context.TempHumidSensors
-                    .Where(x => x.DateTime > from)
-                    .OrderByDescending(x => x.DateTime);
+//        public List<TempHumidSensor> GetTempHumidReadings(DateTime? from = null, DateTime? to = null)
+//        {
+//            // Finds based on timeinterval
+//            if (from != null && to != null)
+//            {
+//                var tempHumidSensors1 = _context.TempHumidSensors
+//                    .Where(x => x.DateTime > from && x.DateTime < to)
+//                    .OrderByDescending(x => x.DateTime);
 
-                return tempHumidSensors2.ToList();
-            }
+//                return tempHumidSensors1.ToList();
+//            }
 
-            //Find all if no timeframe sent
-            var tempHumidSensors = _context.TempHumidSensors.OrderByDescending(x => x.DateTime);
+//            // Finds based on from and to the newest
+//            if (from == null && to != null)
+//            {
+//                var tempHumidSensors2 = _context.TempHumidSensors
+//                    .Where(x => x.DateTime > from)
+//                    .OrderByDescending(x => x.DateTime);
 
-            return tempHumidSensors.ToList();
-        }
-    }
-}
+//                return tempHumidSensors2.ToList();
+//            }
+
+//            //Find all if no timeframe sent
+//            var tempHumidSensors = _context.TempHumidSensors.OrderByDescending(x => x.DateTime);
+
+//            return tempHumidSensors.ToList();
+//        }
+//    }
+//}
