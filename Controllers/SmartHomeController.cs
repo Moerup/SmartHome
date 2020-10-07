@@ -49,8 +49,8 @@ namespace SmartHome.Controllers
         public async Task<string> GetPiTemperatureHumidSensor()
         {
             await _grovePi.ReadDHTValues();
-            var humidity = _grovePi.TempHumid.LastRelativeHumidity.ToString();
-            var temperature = _grovePi.TempHumid.LastTemperature.ToString();
+            var humidity = _grovePi.Humidity;
+            var temperature = _grovePi.Temperature;
 
             _grovePi.Display.Clear();
             _grovePi.Display.Write($"Temp: {temperature}C");

@@ -50,10 +50,17 @@ namespace SmartHome.Services
 
         public async Task ReadDHTValues()
         {
+            Console.WriteLine("Getting NonNaN values from DHT sensor:");
+            TempHumid.Read();
             while (Double.IsNaN(TempHumid.LastRelativeHumidity) && Double.IsNaN(TempHumid.LastTemperature))
             {
                 TempHumid.Read();
+                Console.WriteLine($"Humidity: {TempHumid.LastRelativeHumidity}");
+                Console.WriteLine($"Temperature: {TempHumid.LastTemperature}");
+
             }
+            Temperature = TempHumid.LastTemperature.ToString();
+            Humidity = TempHumid.LastRelativeHumidity.ToString();
         }
     }
 }

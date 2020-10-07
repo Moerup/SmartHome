@@ -28,6 +28,7 @@ namespace SmartHome.Models
 
         public string Location { get; set; }
 
+        [JsonIgnore]
         public DateTime DateTime { get; set; }
     }
 }
